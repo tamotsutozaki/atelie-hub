@@ -43,6 +43,9 @@ public class AppDbContext : DbContext
             else if (entry.State == EntityState.Modified)
             {
                 entry.Entity.AtualizadoEm = agora;
+                // CriadoEm é imutável: nunca sobrescrever em update (protege contra Update()
+                // de entidade desanexada, que marcaria todas as colunas como Modified).
+                entry.Property(e => e.CriadoEm).IsModified = false;
             }
         }
     }

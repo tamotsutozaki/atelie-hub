@@ -6,7 +6,8 @@ namespace AtelieHub.Core.Common;
 /// </summary>
 public abstract class BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    // UUID v7 (ordenado por tempo): melhor localidade de índice na PK e ordem natural de criação.
+    public Guid Id { get; set; } = Guid.CreateVersion7();
 
     public DateTime CriadoEm { get; set; }
 

@@ -34,14 +34,22 @@ public partial class DashboardViewModel : ObservableObject
 
     private async Task CarregarAsync()
     {
-        var empresa = await _empresaService.ObterAtualAsync();
-        if (empresa is null)
+        try
         {
-            return;
-        }
+            var empresa = await _empresaService.ObterAtualAsync();
+            if (empresa is null)
+            {
+                return;
+            }
 
-        NomeEmpresa = empresa.Nome;
-        var quem = string.IsNullOrWhiteSpace(empresa.NomeResponsavel) ? empresa.Nome : empresa.NomeResponsavel;
-        Saudacao = $"Bem-vinda, {quem}!";
+            NomeEmpresa = empresa.Nome;
+            var quem = string.IsNullOrWhiteSpace(empresa.NomeResponsavel) ? empresa.Nome : empresa.NomeResponsavel;
+            Saudacao = $"Bem-vinda, {quem}!";
+        }
+        catch (Exception ex)
+        {
+            // Carga best-effort: se falhar, mantém os placeholders sem derrubar a UI.
+            System.Diagnostics.Debug.WriteLine($"[Dashboard] Falha ao carregar dados: {ex.Message}");
+        }
     }
 }

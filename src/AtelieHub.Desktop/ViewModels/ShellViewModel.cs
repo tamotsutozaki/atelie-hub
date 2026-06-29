@@ -39,10 +39,18 @@ public partial class ShellViewModel : ObservableObject
 
     private async Task CarregarCabecalhoAsync(IEmpresaService empresaService)
     {
-        var empresa = await empresaService.ObterAtualAsync();
-        if (empresa is not null)
+        try
         {
-            NomeEmpresa = empresa.Nome;
+            var empresa = await empresaService.ObterAtualAsync();
+            if (empresa is not null)
+            {
+                NomeEmpresa = empresa.Nome;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Carga best-effort do cabeçalho: falha não deve derrubar o shell.
+            System.Diagnostics.Debug.WriteLine($"[Shell] Falha ao carregar cabeçalho: {ex.Message}");
         }
     }
 }
