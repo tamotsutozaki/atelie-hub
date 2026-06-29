@@ -1,0 +1,85 @@
+<UserControl x:Class="AtelieHub.Desktop.Views.Pages.EstoquePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Background="{StaticResource Brand.Surface}">
+
+    <UserControl.Resources>
+        <Style x:Key="CabecalhoColuna" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource Brand.Dark}" />
+            <Setter Property="Foreground" Value="{StaticResource Brand.TextOnDark}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <ui:TextBox Width="260" PlaceholderText="Buscar item..."
+                            Text="{Binding Busca, UpdateSourceTrigger=PropertyChanged, Delay=250}" />
+                <CheckBox Content="Só estoque baixo" IsChecked="{Binding SomenteBaixo}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{StaticResource Brand.Text}" />
+                <CheckBox Content="Mostrar inativos" IsChecked="{Binding MostrarInativos}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{StaticResource Brand.Text}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Ativar / Inativar" Command="{Binding AlternarAtivoCommand}"
+                        Padding="16,10" Margin="0,0,10,0" />
+                <Button Content="Editar" Command="{Binding EditarCommand}" Padding="16,10" Margin="0,0,10,0" />
+                <Button Content="+ Novo item" Style="{StaticResource Botao.Primario}"
+                        Command="{Binding NovoCommand}" />
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Padding="0">
+            <DataGrid x:Name="GradeEstoque"
+                      ItemsSource="{Binding Produtos}"
+                      SelectedItem="{Binding Selecionado}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      RowHeight="38"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      ColumnHeaderStyle="{StaticResource CabecalhoColuna}"
+                      MouseDoubleClick="GradeEstoque_MouseDoubleClick">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding EstaBaixo}" Value="True">
+                                <Setter Property="Background" Value="#FBE7D2" />
+                                <Setter Property="Foreground" Value="{StaticResource Brand.PrimaryDark}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Item" Binding="{Binding Nome}" Width="2*" />
+                    <DataGridTextColumn Header="Quantidade" Binding="{Binding Quantidade}" Width="110" />
+                    <DataGridTextColumn Header="Unidade" Binding="{Binding Unidade}" Width="90" />
+                    <DataGridTextColumn Header="Mínimo" Binding="{Binding EstoqueMinimo}" Width="100" />
+                    <DataGridTextColumn Header="Custo" Binding="{Binding Custo, StringFormat=C}" Width="100" />
+                    <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="60" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <TextBlock Grid.Row="2" Text="{Binding Resumo}" Margin="4,12,0,0"
+                   Foreground="{StaticResource Brand.TextMuted}" FontSize="13" />
+    </Grid>
+</UserControl>

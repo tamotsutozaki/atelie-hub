@@ -14,6 +14,14 @@ public class AppDbContext : DbContext
 
     public DbSet<Cliente> Clientes => Set<Cliente>();
 
+    public DbSet<Pedido> Pedidos => Set<Pedido>();
+
+    public DbSet<LancamentoFinanceiro> LancamentosFinanceiros => Set<LancamentoFinanceiro>();
+
+    public DbSet<ProdutoEstoque> ProdutosEstoque => Set<ProdutoEstoque>();
+
+    public DbSet<TarefaMarketing> TarefasMarketing => Set<TarefaMarketing>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

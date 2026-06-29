@@ -17,6 +17,18 @@
         <DataTemplate DataType="{x:Type vm:ClientesViewModel}">
             <pages:ClientesPage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PedidosViewModel}">
+            <pages:PedidosPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FinanceiroViewModel}">
+            <pages:FinanceiroPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EstoqueViewModel}">
+            <pages:EstoquePage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MarketingViewModel}">
+            <pages:MarketingPage />
+        </DataTemplate>
 
         <!-- Item de navegação com destaque dinâmico da seção ativa -->
         <Style x:Key="Nav.Painel" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
@@ -30,6 +42,38 @@
         <Style x:Key="Nav.Clientes" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding SecaoAtiva}" Value="Clientes">
+                    <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Nav.Pedidos" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SecaoAtiva}" Value="Pedidos">
+                    <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Nav.Financeiro" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SecaoAtiva}" Value="Financeiro">
+                    <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Nav.Estoque" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SecaoAtiva}" Value="Estoque">
+                    <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Nav.Marketing" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SecaoAtiva}" Value="Marketing">
                     <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
                     <Setter Property="FontWeight" Value="SemiBold" />
                 </DataTrigger>
@@ -62,14 +106,14 @@
                             Command="{Binding NavegarDashboardCommand}" />
                     <Button Content="Clientes" Style="{StaticResource Nav.Clientes}"
                             Command="{Binding NavegarClientesCommand}" />
-                    <Button Content="Pedidos" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
-                    <Button Content="Financeiro" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
-                    <Button Content="Estoque" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
-                    <Button Content="Marketing" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
-
-                    <TextBlock Text="Em breve nos próximos módulos" FontSize="11"
-                               Margin="20,12,20,0" TextWrapping="Wrap"
-                               Foreground="{StaticResource Brand.Sand}" Opacity="0.7" />
+                    <Button Content="Pedidos" Style="{StaticResource Nav.Pedidos}"
+                            Command="{Binding NavegarPedidosCommand}" />
+                    <Button Content="Financeiro" Style="{StaticResource Nav.Financeiro}"
+                            Command="{Binding NavegarFinanceiroCommand}" />
+                    <Button Content="Estoque" Style="{StaticResource Nav.Estoque}"
+                            Command="{Binding NavegarEstoqueCommand}" />
+                    <Button Content="Marketing" Style="{StaticResource Nav.Marketing}"
+                            Command="{Binding NavegarMarketingCommand}" />
                 </StackPanel>
             </DockPanel>
         </Border>

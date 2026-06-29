@@ -9,21 +9,22 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AtelieHub.Desktop.ViewModels;
 
-public partial class ClientesViewModel : ObservableObject
+public partial class EstoqueViewModel : ObservableObject
 {
-    private readonly IClienteService _clienteService;
+    private readonly IEstoqueService _estoqueService;
     private readonly IServiceProvider _services;
 
-    public ClientesViewModel(IClienteService clienteService, IServiceProvider services)
+    public EstoqueViewModel(IEstoqueService estoqueService, IServiceProvider services)
     {
-        _clienteService = clienteService;
+        _estoqueService = estoqueService;
         _services = services;
         _ = CarregarAsync();
     }
 
-    public ObservableCollection<Cliente> Clientes { get; } = new();
+    public ObservableCollection<ProdutoEstoque> Produtos { get; } = new();
 
     [ObservableProperty] private string? _busca;
+    [ObservableProperty] private bool _somenteBaixo;
     [ObservableProperty] private bool _mostrarInativos;
     [ObservableProperty] private bool _carregando;
     [ObservableProperty] private string _resumo = string.Empty;
@@ -31,9 +32,10 @@ public partial class ClientesViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditarCommand))]
     [NotifyCanExecuteChangedFor(nameof(AlternarAtivoCommand))]
-    private Cliente? _clienteSelecionado;
+    private ProdutoEstoque? _selecionado;
 
     partial void OnBuscaChanged(string? value) => _ = CarregarAsync();
+    partial void OnSomenteBaixoChanged(bool value) => _ = CarregarAsync();
     partial void OnMostrarInativosChanged(bool value) => _ = CarregarAsync();
 
     [RelayCommand]
@@ -42,23 +44,23 @@ public partial class ClientesViewModel : ObservableObject
         try
         {
             Carregando = true;
-            var idSelecionado = ClienteSelecionado?.Id;
-            var lista = await _clienteService.ListarAsync(Busca, MostrarInativos);
-            Clientes.Clear();
-            foreach (var c in lista)
+            var idSelecionado = Selecionado?.Id;
+
+            var lista = await _estoqueService.ListarAsync(Busca, SomenteBaixo, MostrarInativos);
+            Produtos.Clear();
+            foreach (var p in lista)
             {
-                Clientes.Add(c);
+                Produtos.Add(p);
             }
-            // Preserva a seleção (e os botões de ação) após recarregar a lista.
             if (idSelecionado is not null)
             {
-                ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == idSelecionado);
+                Selecionado = Produtos.FirstOrDefault(p => p.Id == idSelecionado);
             }
-            Resumo = Clientes.Count == 1 ? "1 cliente" : $"{Clientes.Count} clientes";
+            Resumo = Produtos.Count == 1 ? "1 item" : $"{Produtos.Count} itens";
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Não foi possível carregar os clientes.\n\nDetalhe: " + ex.Message,
+            MessageBox.Show("Não foi possível carregar o estoque.\n\nDetalhe: " + ex.Message,
                 "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -70,38 +72,36 @@ public partial class ClientesViewModel : ObservableObject
     [RelayCommand]
     private void Novo() => AbrirEdicao(null);
 
-    private bool TemSelecao() => ClienteSelecionado is not null;
+    private bool TemSelecao() => Selecionado is not null;
 
     [RelayCommand(CanExecute = nameof(TemSelecao))]
-    private void Editar() => AbrirEdicao(ClienteSelecionado);
+    private void Editar() => AbrirEdicao(Selecionado);
 
     [RelayCommand(CanExecute = nameof(TemSelecao))]
     private async Task AlternarAtivoAsync()
     {
-        if (ClienteSelecionado is null)
+        if (Selecionado is null)
         {
             return;
         }
 
-        var alvo = !ClienteSelecionado.Ativo;
         try
         {
-            await _clienteService.DefinirAtivoAsync(ClienteSelecionado.Id, alvo);
+            await _estoqueService.DefinirAtivoAsync(Selecionado.Id, !Selecionado.Ativo);
             await CarregarAsync();
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Não foi possível alterar a situação do cliente.\n\nDetalhe: " + ex.Message,
+            MessageBox.Show("Não foi possível alterar o item.\n\nDetalhe: " + ex.Message,
                 "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
-    /// <summary>Abre o diálogo de cadastro/edição. Recarrega a lista se algo foi salvo.</summary>
-    public void AbrirEdicao(Cliente? cliente)
+    public void AbrirEdicao(ProdutoEstoque? produto)
     {
-        var janela = _services.GetRequiredService<ClienteEdicaoWindow>();
+        var janela = _services.GetRequiredService<ProdutoEstoqueEdicaoWindow>();
         janela.Owner = Application.Current.MainWindow;
-        janela.ViewModel.Inicializar(cliente);
+        janela.ViewModel.Inicializar(produto);
 
         if (janela.ShowDialog() == true)
         {

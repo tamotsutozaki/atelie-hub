@@ -50,6 +50,38 @@ public partial class ShellViewModel : ObservableObject
         SecaoAtiva = "Clientes";
     }
 
+    [RelayCommand]
+    private void NavegarPedidos()
+    {
+        CurrentView = _services.GetRequiredService<PedidosViewModel>();
+        TituloSecao = "Pedidos";
+        SecaoAtiva = "Pedidos";
+    }
+
+    [RelayCommand]
+    private void NavegarFinanceiro()
+    {
+        CurrentView = _services.GetRequiredService<FinanceiroViewModel>();
+        TituloSecao = "Financeiro";
+        SecaoAtiva = "Financeiro";
+    }
+
+    [RelayCommand]
+    private void NavegarEstoque()
+    {
+        CurrentView = _services.GetRequiredService<EstoqueViewModel>();
+        TituloSecao = "Estoque";
+        SecaoAtiva = "Estoque";
+    }
+
+    [RelayCommand]
+    private void NavegarMarketing()
+    {
+        CurrentView = _services.GetRequiredService<MarketingViewModel>();
+        TituloSecao = "Marketing";
+        SecaoAtiva = "Marketing";
+    }
+
     private async Task CarregarCabecalhoAsync(IEmpresaService empresaService)
     {
         try

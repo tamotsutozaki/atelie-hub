@@ -23,6 +23,12 @@ public static class DependencyInjection
 
         services.AddSingleton<IEmpresaService, EmpresaService>();
         services.AddSingleton<IClienteService, ClienteService>();
+        services.AddSingleton<IPedidoService, PedidoService>();
+        services.AddSingleton<IFinanceiroService, FinanceiroService>();
+        services.AddSingleton<IEstoqueService, EstoqueService>();
+        services.AddSingleton<IMarketingService, MarketingService>();
+        services.AddSingleton<IDashboardService, DashboardService>();
+        services.AddSingleton<IBackupService, BackupService>();
 
         return services;
     }

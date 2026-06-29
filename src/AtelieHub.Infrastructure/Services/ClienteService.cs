@@ -26,12 +26,12 @@ public class ClienteService : IClienteService
 
         if (!string.IsNullOrWhiteSpace(busca))
         {
-            var termo = $"%{busca.Trim()}%";
+            var termo = $"%{EscaparCuringa(busca.Trim())}%";
             query = query.Where(c =>
-                EF.Functions.ILike(c.Nome, termo) ||
-                (c.Telefone != null && EF.Functions.ILike(c.Telefone, termo)) ||
-                (c.Email != null && EF.Functions.ILike(c.Email, termo)) ||
-                (c.Instagram != null && EF.Functions.ILike(c.Instagram, termo)));
+                EF.Functions.ILike(c.Nome, termo, "\\") ||
+                (c.Telefone != null && EF.Functions.ILike(c.Telefone, termo, "\\")) ||
+                (c.Email != null && EF.Functions.ILike(c.Email, termo, "\\")) ||
+                (c.Instagram != null && EF.Functions.ILike(c.Instagram, termo, "\\")));
         }
 
         return await query.OrderBy(c => c.Nome).ToListAsync(ct);
@@ -80,6 +80,10 @@ public class ClienteService : IClienteService
         await db.SaveChangesAsync(ct);
         return existente;
     }
+
+    /// <summary>Escapa os curingas do LIKE (\ % _) para que a busca trate o texto digitado como literal.</summary>
+    private static string EscaparCuringa(string s) =>
+        s.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
 
     public async Task DefinirAtivoAsync(Guid id, bool ativo, CancellationToken ct = default)
     {

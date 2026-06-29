@@ -5,66 +5,73 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28">
         <StackPanel>
 
-            <!-- Saudação -->
+            <!-- Saudação + ações -->
             <Border Style="{StaticResource Card}" Background="{StaticResource Brand.Dark}" Padding="28">
-                <StackPanel>
-                    <TextBlock Text="{Binding Saudacao}" FontSize="24" FontWeight="Bold"
-                               Foreground="{StaticResource Brand.TextOnDark}" />
-                    <TextBlock Text="Aqui você acompanha o dia a dia do seu ateliê num lugar só."
-                               FontSize="14" Margin="0,8,0,0"
-                               Foreground="{StaticResource Brand.Sand}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Saudacao}" FontSize="24" FontWeight="Bold"
+                                   Foreground="{StaticResource Brand.TextOnDark}" />
+                        <TextBlock Text="Aqui você acompanha o dia a dia do seu ateliê num lugar só."
+                                   FontSize="14" Margin="0,8,0,0" Foreground="{StaticResource Brand.Sand}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="Atualizar" Command="{Binding CarregarCommand}"
+                                Padding="16,10" Margin="0,0,10,0" />
+                        <Button Content="Fazer backup" Style="{StaticResource Botao.Primario}"
+                                Command="{Binding FazerBackupCommand}" />
+                    </StackPanel>
+                </Grid>
             </Border>
 
             <!-- Indicadores -->
-            <UniformGrid Rows="1" Columns="4" Margin="0,18,0,0">
-                <Border Style="{StaticResource Card}" Margin="0,0,8,0">
+            <UniformGrid Rows="2" Columns="3" Margin="0,18,0,0">
+                <Border Style="{StaticResource Card}" Margin="0,0,8,8">
                     <StackPanel>
-                        <TextBlock Text="Pedidos em aberto" FontSize="13"
-                                   Foreground="{StaticResource Brand.TextMuted}" />
+                        <TextBlock Text="Pedidos em aberto" FontSize="13" Foreground="{StaticResource Brand.TextMuted}" />
                         <TextBlock Text="{Binding PedidosEmAberto}" FontSize="32" FontWeight="Bold"
                                    Margin="0,6,0,0" Foreground="{StaticResource Brand.Primary}" />
                     </StackPanel>
                 </Border>
-
-                <Border Style="{StaticResource Card}" Margin="8,0,8,0">
+                <Border Style="{StaticResource Card}" Margin="8,0,8,8">
                     <StackPanel>
-                        <TextBlock Text="A entregar" FontSize="13"
-                                   Foreground="{StaticResource Brand.TextMuted}" />
+                        <TextBlock Text="A entregar" FontSize="13" Foreground="{StaticResource Brand.TextMuted}" />
                         <TextBlock Text="{Binding AEntregar}" FontSize="32" FontWeight="Bold"
                                    Margin="0,6,0,0" Foreground="{StaticResource Brand.Primary}" />
                     </StackPanel>
                 </Border>
-
-                <Border Style="{StaticResource Card}" Margin="8,0,8,0">
+                <Border Style="{StaticResource Card}" Margin="8,0,0,8">
                     <StackPanel>
-                        <TextBlock Text="Pendências financeiras" FontSize="13"
-                                   Foreground="{StaticResource Brand.TextMuted}" />
+                        <TextBlock Text="Pendências de pagamento" FontSize="13" Foreground="{StaticResource Brand.TextMuted}" />
                         <TextBlock Text="{Binding PendenciasFinanceiras}" FontSize="32" FontWeight="Bold"
                                    Margin="0,6,0,0" Foreground="{StaticResource Brand.Accent}" />
                     </StackPanel>
                 </Border>
-
-                <Border Style="{StaticResource Card}" Margin="8,0,0,0">
+                <Border Style="{StaticResource Card}" Margin="0,8,8,0">
                     <StackPanel>
-                        <TextBlock Text="Estoque baixo" FontSize="13"
-                                   Foreground="{StaticResource Brand.TextMuted}" />
+                        <TextBlock Text="Estoque baixo" FontSize="13" Foreground="{StaticResource Brand.TextMuted}" />
                         <TextBlock Text="{Binding EstoqueBaixo}" FontSize="32" FontWeight="Bold"
                                    Margin="0,6,0,0" Foreground="{StaticResource Brand.Accent}" />
                     </StackPanel>
                 </Border>
+                <Border Style="{StaticResource Card}" Margin="8,8,8,0">
+                    <StackPanel>
+                        <TextBlock Text="Marketing pendente" FontSize="13" Foreground="{StaticResource Brand.TextMuted}" />
+                        <TextBlock Text="{Binding MarketingPendente}" FontSize="32" FontWeight="Bold"
+                                   Margin="0,6,0,0" Foreground="{StaticResource Brand.Primary}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Margin="8,8,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Saldo em caixa" FontSize="13" Foreground="{StaticResource Brand.TextMuted}" />
+                        <TextBlock Text="{Binding SaldoCaixa, StringFormat=C}" FontSize="32" FontWeight="Bold"
+                                   Margin="0,6,0,0" Foreground="{StaticResource Brand.Text}" />
+                    </StackPanel>
+                </Border>
             </UniformGrid>
-
-            <!-- Aviso de versão -->
-            <Border Style="{StaticResource Card}" Margin="0,18,0,0">
-                <StackPanel>
-                    <TextBlock Text="Você está na versão inicial (beta)" FontSize="16" FontWeight="SemiBold"
-                               Foreground="{StaticResource Brand.Text}" />
-                    <TextBlock Margin="0,8,0,0" TextWrapping="Wrap" FontSize="14"
-                               Foreground="{StaticResource Brand.TextMuted}"
-                               Text="Os módulos de Clientes, Pedidos, Financeiro, Estoque e Marketing serão liberados nos próximos passos. Os números acima passam a ser preenchidos automaticamente conforme cada módulo entra." />
-                </StackPanel>
-            </Border>
 
         </StackPanel>
     </ScrollViewer>

@@ -19,6 +19,8 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        ConfigurarCulturaPtBr();
+
         // Rede de segurança: qualquer exceção não tratada na thread de UI vira mensagem amigável.
         DispatcherUnhandledException += OnDispatcherUnhandledException;
 
@@ -82,19 +84,50 @@ public partial class App : Application
                 services.AddTransient<OnboardingViewModel>();
                 services.AddTransient<ClientesViewModel>();
                 services.AddTransient<ClienteEdicaoViewModel>();
+                services.AddTransient<PedidosViewModel>();
+                services.AddTransient<PedidoEdicaoViewModel>();
+                services.AddTransient<FinanceiroViewModel>();
+                services.AddTransient<LancamentoEdicaoViewModel>();
+                services.AddTransient<EstoqueViewModel>();
+                services.AddTransient<ProdutoEstoqueEdicaoViewModel>();
+                services.AddTransient<MarketingViewModel>();
+                services.AddTransient<TarefaMarketingEdicaoViewModel>();
 
                 // Janelas
                 services.AddSingleton<ShellWindow>();
                 services.AddTransient<OnboardingWindow>();
                 services.AddTransient<ClienteEdicaoWindow>();
+                services.AddTransient<PedidoEdicaoWindow>();
+                services.AddTransient<LancamentoEdicaoWindow>();
+                services.AddTransient<ProdutoEstoqueEdicaoWindow>();
+                services.AddTransient<TarefaMarketingEdicaoWindow>();
             })
             .Build();
 
+    private static void ConfigurarCulturaPtBr()
+    {
+        var cultura = new System.Globalization.CultureInfo("pt-BR");
+        System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultura;
+        System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultura;
+        System.Threading.Thread.CurrentThread.CurrentCulture = cultura;
+        System.Threading.Thread.CurrentThread.CurrentUICulture = cultura;
+
+        // Faz os bindings do WPF (datas, moeda) usarem pt-BR.
+        FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(
+                System.Windows.Markup.XmlLanguage.GetLanguage(cultura.IetfLanguageTag)));
+    }
+
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        MostrarErroFatal(e.Exception);
+        // Erro de runtime é recuperável: avisa e MANTÉM o app aberto (não perde o trabalho em andamento).
+        MessageBox.Show(
+            "Ocorreu um erro inesperado, mas o Ateliê Hub continua aberto.\n\n" +
+            "Se o problema persistir, feche e abra o app novamente.\n\n" +
+            "Detalhe técnico: " + e.Exception.Message,
+            "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Warning);
         e.Handled = true;
-        Shutdown();
     }
 
     private static void MostrarErroFatal(Exception ex)

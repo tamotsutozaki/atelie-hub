@@ -6,23 +6,22 @@ using AtelieHub.Desktop.ViewModels;
 
 namespace AtelieHub.Desktop.Views.Pages;
 
-public partial class ClientesPage : UserControl
+public partial class PedidosPage : UserControl
 {
-    public ClientesPage()
+    public PedidosPage()
     {
         InitializeComponent();
     }
 
-    private void GradeClientes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void GradePedidos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        // Só abre a edição se o duplo clique caiu numa LINHA de dados (não no cabeçalho/área vazia).
         var origem = e.OriginalSource as DependencyObject;
         while (origem is not null and not DataGridRow)
         {
             origem = VisualTreeHelper.GetParent(origem);
         }
 
-        if (origem is DataGridRow && DataContext is ClientesViewModel vm && vm.EditarCommand.CanExecute(null))
+        if (origem is DataGridRow && DataContext is PedidosViewModel vm && vm.EditarCommand.CanExecute(null))
         {
             vm.EditarCommand.Execute(null);
         }
