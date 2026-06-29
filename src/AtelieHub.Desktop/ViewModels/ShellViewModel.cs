@@ -30,11 +30,24 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty]
     private string _nomeEmpresa = "Ateliê Hub";
 
+    /// <summary>Seção atualmente selecionada — usada para destacar o item no menu lateral.</summary>
+    [ObservableProperty]
+    private string _secaoAtiva = "Painel";
+
     [RelayCommand]
     private void NavegarDashboard()
     {
         CurrentView = _services.GetRequiredService<DashboardViewModel>();
         TituloSecao = "Painel";
+        SecaoAtiva = "Painel";
+    }
+
+    [RelayCommand]
+    private void NavegarClientes()
+    {
+        CurrentView = _services.GetRequiredService<ClientesViewModel>();
+        TituloSecao = "Clientes";
+        SecaoAtiva = "Clientes";
     }
 
     private async Task CarregarCabecalhoAsync(IEmpresaService empresaService)

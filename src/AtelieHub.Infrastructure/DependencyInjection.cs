@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddDbContextFactory<AppDbContext>(options => options.UseNpgsql(connectionString));
 
         services.AddSingleton<IEmpresaService, EmpresaService>();
+        services.AddSingleton<IClienteService, ClienteService>();
 
         return services;
     }

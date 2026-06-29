@@ -14,6 +14,27 @@
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
             <pages:DashboardPage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ClientesViewModel}">
+            <pages:ClientesPage />
+        </DataTemplate>
+
+        <!-- Item de navegação com destaque dinâmico da seção ativa -->
+        <Style x:Key="Nav.Painel" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SecaoAtiva}" Value="Painel">
+                    <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Nav.Clientes" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SecaoAtiva}" Value="Clientes">
+                    <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -37,9 +58,10 @@
                            Foreground="{StaticResource Brand.Sand}" Opacity="0.7" />
 
                 <StackPanel Margin="0,8,0,0">
-                    <Button Content="Painel" Style="{StaticResource Nav.Botao.Ativo}"
+                    <Button Content="Painel" Style="{StaticResource Nav.Painel}"
                             Command="{Binding NavegarDashboardCommand}" />
-                    <Button Content="Clientes" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
+                    <Button Content="Clientes" Style="{StaticResource Nav.Clientes}"
+                            Command="{Binding NavegarClientesCommand}" />
                     <Button Content="Pedidos" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
                     <Button Content="Financeiro" Style="{StaticResource Nav.Botao}" IsEnabled="False" />
                     <Button Content="Estoque" Style="{StaticResource Nav.Botao}" IsEnabled="False" />

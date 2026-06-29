@@ -80,10 +80,13 @@ public partial class App : Application
                 services.AddSingleton<ShellViewModel>();
                 services.AddTransient<DashboardViewModel>();
                 services.AddTransient<OnboardingViewModel>();
+                services.AddTransient<ClientesViewModel>();
+                services.AddTransient<ClienteEdicaoViewModel>();
 
                 // Janelas
                 services.AddSingleton<ShellWindow>();
                 services.AddTransient<OnboardingWindow>();
+                services.AddTransient<ClienteEdicaoWindow>();
             })
             .Build();
 
