@@ -41,7 +41,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Valor (R$) *" Style="{StaticResource Campo.Label}" />
-                    <ui:TextBox Text="{Binding Valor, UpdateSourceTrigger=LostFocus}" />
+                    <ui:TextBox Text="{Binding Valor, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="Data" Style="{StaticResource Campo.Label}" />

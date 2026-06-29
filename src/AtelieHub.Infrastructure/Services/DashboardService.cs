@@ -1,3 +1,4 @@
+using AtelieHub.Core.Entities;
 using AtelieHub.Core.Enums;
 using AtelieHub.Core.Services;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +26,7 @@ public class DashboardService : IDashboardService
         var pendenciasFinanceiras = await db.Pedidos.CountAsync(
             p => p.StatusPagamento != StatusPagamento.Pago && p.Status != StatusPedido.Cancelado, ct);
 
-        var estoqueBaixo = await db.ProdutosEstoque.CountAsync(
-            p => p.Ativo && p.Quantidade <= p.EstoqueMinimo, ct);
+        var estoqueBaixo = await db.ProdutosEstoque.CountAsync(ProdutoEstoque.EstoqueBaixoPredicado, ct);
 
         var marketingPendente = await db.TarefasMarketing.CountAsync(t => !t.Concluido, ct);
 

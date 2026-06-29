@@ -109,7 +109,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Valor total (R$)" Style="{StaticResource Campo.Label}" />
-                        <ui:TextBox Text="{Binding ValorTotal, UpdateSourceTrigger=LostFocus}" />
+                        <ui:TextBox Text="{Binding ValorTotal, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Pagamento" Style="{StaticResource Campo.Label}" />

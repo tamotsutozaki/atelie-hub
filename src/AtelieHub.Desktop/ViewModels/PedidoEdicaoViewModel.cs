@@ -71,7 +71,7 @@ public partial class PedidoEdicaoViewModel : ObservableObject
 
         _id = pedido.Id;
         TituloJanela = $"Pedido #{pedido.Numero}";
-        ClienteSelecionado = Clientes.FirstOrDefault(c => c.Id == pedido.ClienteId);
+        ClienteSelecionado = await GarantirClienteNaListaAsync(pedido.ClienteId);
         Titulo = pedido.Titulo;
         Descricao = pedido.Descricao;
         Tipo = pedido.Tipo;
@@ -106,6 +106,35 @@ public partial class PedidoEdicaoViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Retorna o cliente do pedido garantindo que ele exista na coleção do ComboBox.
+    /// A lista só traz clientes ativos; se o cliente vinculado foi inativado depois,
+    /// ele é buscado e adicionado para não sumir da seleção (e travar o salvar).
+    /// </summary>
+    private async Task<Cliente?> GarantirClienteNaListaAsync(Guid clienteId)
+    {
+        var cliente = Clientes.FirstOrDefault(c => c.Id == clienteId);
+        if (cliente is not null)
+        {
+            return cliente;
+        }
+
+        try
+        {
+            cliente = await _clienteService.ObterAsync(clienteId);
+            if (cliente is not null)
+            {
+                Clientes.Add(cliente);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[PedidoEdicao] Falha ao recuperar cliente do pedido: {ex.Message}");
+        }
+
+        return cliente;
+    }
+
     private bool PodeSalvar() =>
         !string.IsNullOrWhiteSpace(Titulo) && ClienteSelecionado is not null && !Salvando;
 
@@ -114,6 +143,13 @@ public partial class PedidoEdicaoViewModel : ObservableObject
     {
         if (ClienteSelecionado is null)
         {
+            return;
+        }
+
+        if (ValorTotal < 0)
+        {
+            MessageBox.Show("O valor total não pode ser negativo.",
+                "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 

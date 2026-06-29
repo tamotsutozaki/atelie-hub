@@ -19,6 +19,7 @@ public partial class PedidosViewModel : ObservableObject
     {
         _pedidoService = pedidoService;
         _services = services;
+        _filtroStatusSelecionado = FiltrosStatus[0]; // "Todos os status" visível ao abrir
         _ = CarregarAsync();
     }
 
@@ -40,6 +41,7 @@ public partial class PedidosViewModel : ObservableObject
 
     [ObservableProperty] private string? _busca;
     [ObservableProperty] private StatusPedido? _filtroStatus;
+    [ObservableProperty] private OpcaoStatus? _filtroStatusSelecionado;
     [ObservableProperty] private bool _carregando;
     [ObservableProperty] private string _resumo = string.Empty;
 
@@ -49,6 +51,7 @@ public partial class PedidosViewModel : ObservableObject
 
     partial void OnBuscaChanged(string? value) => _ = CarregarAsync();
     partial void OnFiltroStatusChanged(StatusPedido? value) => _ = CarregarAsync();
+    partial void OnFiltroStatusSelecionadoChanged(OpcaoStatus? value) => FiltroStatus = value?.Valor;
 
     [RelayCommand]
     private async Task CarregarAsync()

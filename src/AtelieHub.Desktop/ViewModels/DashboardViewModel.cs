@@ -19,7 +19,7 @@ public partial class DashboardViewModel : ObservableObject
         _empresaService = empresaService;
         _dashboardService = dashboardService;
         _backupService = backupService;
-        _ = CarregarAsync();
+        _ = CarregarAsync(silencioso: true);
     }
 
     [ObservableProperty] private string _saudacao = "Bem-vinda!";
@@ -34,11 +34,17 @@ public partial class DashboardViewModel : ObservableObject
 
     [ObservableProperty] private bool _ocupado;
 
+    /// <summary>Sinaliza que a última carga do painel falhou (para a UI avisar em vez de mostrar zeros como se fossem reais).</summary>
+    [ObservableProperty] private bool _erroAoCarregar;
+
     [RelayCommand]
-    private async Task CarregarAsync()
+    private Task Atualizar() => CarregarAsync(silencioso: false);
+
+    private async Task CarregarAsync(bool silencioso = true)
     {
         try
         {
+            ErroAoCarregar = false;
             var empresa = await _empresaService.ObterAtualAsync();
             if (empresa is not null)
             {
@@ -57,7 +63,16 @@ public partial class DashboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[Dashboard] Falha ao carregar: {ex.Message}");
+            ErroAoCarregar = true;
+            if (silencioso)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Dashboard] Falha ao carregar: {ex.Message}");
+            }
+            else
+            {
+                MessageBox.Show("Não foi possível atualizar o painel.\n\nDetalhe: " + ex.Message,
+                    "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 

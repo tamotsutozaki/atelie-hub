@@ -60,6 +60,13 @@ public partial class ProdutoEstoqueEdicaoViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(PodeSalvar))]
     private async Task SalvarAsync()
     {
+        if (Quantidade < 0 || EstoqueMinimo < 0 || Custo < 0)
+        {
+            MessageBox.Show("Quantidade, estoque mínimo e custo não podem ser negativos.",
+                "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
         try
         {
             Salvando = true;

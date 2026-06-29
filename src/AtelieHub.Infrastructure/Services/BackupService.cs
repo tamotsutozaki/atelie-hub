@@ -94,10 +94,14 @@ public class BackupService : IBackupService
                 continue;
             }
 
+            // Ordena pela versão NUMÉRICA da pasta (major, depois minor), não pela string do
+            // caminho: lexicograficamente "9.6" > "16" (porque '9' > '1'), o que escolheria um
+            // pg_dump mais antigo que o servidor e faria o dump falhar por "server version mismatch".
             var encontrado = Directory.GetDirectories(raiz)
-                .Select(d => Path.Combine(d, "bin", exe))
-                .Where(File.Exists)
-                .OrderByDescending(p => p)
+                .Select(d => new { Bin = Path.Combine(d, "bin", exe), Versao = ExtrairVersao(Path.GetFileName(d)) })
+                .Where(x => File.Exists(x.Bin))
+                .OrderByDescending(x => x.Versao)
+                .Select(x => x.Bin)
                 .FirstOrDefault();
 
             if (encontrado is not null)
@@ -107,5 +111,14 @@ public class BackupService : IBackupService
         }
 
         return null;
+    }
+
+    /// <summary>Converte o nome da pasta de instalação ("16", "15", "9.6") em versão comparável; inválido vira 0.0.</summary>
+    private static Version ExtrairVersao(string nomePasta)
+    {
+        var partes = nomePasta.Split('.');
+        var major = partes.Length > 0 && int.TryParse(partes[0], out var ma) ? ma : 0;
+        var minor = partes.Length > 1 && int.TryParse(partes[1], out var mi) ? mi : 0;
+        return new Version(major, minor);
     }
 }

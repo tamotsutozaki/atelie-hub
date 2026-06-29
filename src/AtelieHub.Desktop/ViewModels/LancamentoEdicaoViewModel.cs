@@ -29,7 +29,11 @@ public partial class LancamentoEdicaoViewModel : ObservableObject
     private string _descricao = string.Empty;
 
     [ObservableProperty] private string? _categoria;
-    [ObservableProperty] private decimal _valor;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SalvarCommand))]
+    private decimal _valor;
+
     [ObservableProperty] private DateTime _data = DateTime.Today;
 
     [ObservableProperty]

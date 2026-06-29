@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AtelieHub.Core.Common;
 
 namespace AtelieHub.Core.Entities;
@@ -22,7 +23,15 @@ public class ProdutoEstoque : BaseEntity
 
     public bool Ativo { get; set; } = true;
 
-    /// <summary>Indica reposição necessária (não persistido).</summary>
+    /// <summary>
+    /// Indica reposição necessária (não persistido). Regra: item ativo, com mínimo definido
+    /// (&gt; 0) e quantidade no/abaixo do mínimo. Exigir mínimo &gt; 0 evita falso alerta em itens
+    /// novos (quantidade e mínimo no default 0) ou cujo mínimo a usuária nunca configurou.
+    /// </summary>
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public bool EstaBaixo => Ativo && Quantidade <= EstoqueMinimo;
+    public bool EstaBaixo => Ativo && EstoqueMinimo > 0 && Quantidade <= EstoqueMinimo;
+
+    /// <summary>Mesma regra de <see cref="EstaBaixo"/> como predicado traduzível pelo EF — fonte única para as queries de "estoque baixo" (lista, contador e dashboard).</summary>
+    public static readonly Expression<Func<ProdutoEstoque, bool>> EstoqueBaixoPredicado =
+        p => p.Ativo && p.EstoqueMinimo > 0 && p.Quantidade <= p.EstoqueMinimo;
 }

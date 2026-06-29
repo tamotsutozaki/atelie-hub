@@ -26,7 +26,7 @@ public class EstoqueService : IEstoqueService
 
         if (somenteBaixo)
         {
-            query = query.Where(p => p.Quantidade <= p.EstoqueMinimo);
+            query = query.Where(ProdutoEstoque.EstoqueBaixoPredicado);
         }
 
         if (!string.IsNullOrWhiteSpace(busca))
@@ -84,7 +84,7 @@ public class EstoqueService : IEstoqueService
     public async Task<int> ContarBaixoAsync(CancellationToken ct = default)
     {
         await using var db = await _factory.CreateDbContextAsync(ct);
-        return await db.ProdutosEstoque.CountAsync(p => p.Ativo && p.Quantidade <= p.EstoqueMinimo, ct);
+        return await db.ProdutosEstoque.CountAsync(ProdutoEstoque.EstoqueBaixoPredicado, ct);
     }
 
     private static string EscaparCuringa(string s) =>

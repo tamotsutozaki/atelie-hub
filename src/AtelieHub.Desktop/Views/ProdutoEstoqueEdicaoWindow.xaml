@@ -33,7 +33,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Quantidade" Style="{StaticResource Campo.Label}" />
-                        <ui:TextBox Text="{Binding Quantidade, UpdateSourceTrigger=LostFocus}" />
+                        <ui:TextBox Text="{Binding Quantidade, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Unidade" Style="{StaticResource Campo.Label}" />
@@ -50,11 +50,11 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Estoque mínimo" Style="{StaticResource Campo.Label}" />
-                        <ui:TextBox Text="{Binding EstoqueMinimo, UpdateSourceTrigger=LostFocus}" />
+                        <ui:TextBox Text="{Binding EstoqueMinimo, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Custo (R$)" Style="{StaticResource Campo.Label}" />
-                        <ui:TextBox Text="{Binding Custo, UpdateSourceTrigger=LostFocus}" />
+                        <ui:TextBox Text="{Binding Custo, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Grid>
 
