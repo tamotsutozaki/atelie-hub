@@ -1,0 +1,50 @@
+# ===== Segredos locais (NUNCA versionar) =====
+appsettings.Local.json
+appsettings.*.Local.json
+*.Local.json
+
+# ===== Build .NET =====
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+build/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# ===== Visual Studio / Rider / VS Code =====
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+*_i.c
+*_p.c
+*.rsuser
+
+# ===== Pacotes / restore =====
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ===== Testes / cobertura =====
+[Tt]est[Rr]esult*/
+*.coverage
+*.coveragexml
+
+# ===== Diversos =====
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store

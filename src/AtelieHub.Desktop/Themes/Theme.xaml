@@ -1,0 +1,116 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============ Paleta artística (base marrom) ============ -->
+    <Color x:Key="Cor.Dark">#2E211A</Color>
+    <Color x:Key="Cor.Primary">#6F4E37</Color>
+    <Color x:Key="Cor.PrimaryDark">#553A29</Color>
+    <Color x:Key="Cor.Accent">#C2884E</Color>
+    <Color x:Key="Cor.Surface">#FBF7F1</Color>
+    <Color x:Key="Cor.Card">#FFFFFF</Color>
+    <Color x:Key="Cor.Sand">#D8C7AE</Color>
+    <Color x:Key="Cor.SandLight">#ECE3D5</Color>
+    <Color x:Key="Cor.Text">#2C231D</Color>
+    <Color x:Key="Cor.TextMuted">#8A7765</Color>
+    <Color x:Key="Cor.TextOnDark">#F3EADD</Color>
+
+    <SolidColorBrush x:Key="Brand.Dark" Color="{StaticResource Cor.Dark}" />
+    <SolidColorBrush x:Key="Brand.Primary" Color="{StaticResource Cor.Primary}" />
+    <SolidColorBrush x:Key="Brand.PrimaryDark" Color="{StaticResource Cor.PrimaryDark}" />
+    <SolidColorBrush x:Key="Brand.Accent" Color="{StaticResource Cor.Accent}" />
+    <SolidColorBrush x:Key="Brand.Surface" Color="{StaticResource Cor.Surface}" />
+    <SolidColorBrush x:Key="Brand.Card" Color="{StaticResource Cor.Card}" />
+    <SolidColorBrush x:Key="Brand.Sand" Color="{StaticResource Cor.Sand}" />
+    <SolidColorBrush x:Key="Brand.SandLight" Color="{StaticResource Cor.SandLight}" />
+    <SolidColorBrush x:Key="Brand.Text" Color="{StaticResource Cor.Text}" />
+    <SolidColorBrush x:Key="Brand.TextMuted" Color="{StaticResource Cor.TextMuted}" />
+    <SolidColorBrush x:Key="Brand.TextOnDark" Color="{StaticResource Cor.TextOnDark}" />
+
+    <!-- ============ Tipografia ============ -->
+    <Style x:Key="Titulo.Secao" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Brand.Text}" />
+    </Style>
+
+    <Style x:Key="Campo.Label" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{StaticResource Brand.Text}" />
+        <Setter Property="Margin" Value="0,14,0,6" />
+    </Style>
+
+    <!-- ============ Botão primário (marca) ============ -->
+    <Style x:Key="Botao.Primario" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource Brand.TextOnDark}" />
+        <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding" Value="22,11" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="fundo" Background="{TemplateBinding Background}"
+                            CornerRadius="8" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="fundo" Property="Background" Value="{StaticResource Brand.PrimaryDark}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="fundo" Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ Botão de navegação (sidebar) ============ -->
+    <Style x:Key="Nav.Botao" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource Brand.TextOnDark}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="16,11" />
+        <Setter Property="Margin" Value="10,2" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="fundo" Background="{TemplateBinding Background}"
+                            CornerRadius="8" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="fundo" Property="Background" Value="#3D2D23" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource Brand.Sand}" />
+                            <Setter TargetName="fundo" Property="Opacity" Value="0.55" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Variante ativa do botão de navegação -->
+    <Style x:Key="Nav.Botao.Ativo" TargetType="Button" BasedOn="{StaticResource Nav.Botao}">
+        <Setter Property="Background" Value="{StaticResource Brand.Primary}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!-- ============ Card ============ -->
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Brand.Card}" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brand.SandLight}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+</ResourceDictionary>

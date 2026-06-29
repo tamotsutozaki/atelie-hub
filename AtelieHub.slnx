@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AtelieHub.Core/AtelieHub.Core.csproj" />
+    <Project Path="src/AtelieHub.Desktop/AtelieHub.Desktop.csproj" />
+    <Project Path="src/AtelieHub.Infrastructure/AtelieHub.Infrastructure.csproj" />
+  </Folder>
+</Solution>
