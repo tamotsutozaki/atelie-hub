@@ -1,0 +1,6 @@
+{
+  "_INSTRUCOES": "Copie este arquivo para 'appsettings.Local.json' (na mesma pasta) e troque APENAS o campo Password pela senha do usuario 'postgres' definida na instalacao do PostgreSQL. Nao versione o appsettings.Local.json (ja esta no .gitignore). Ajuste Host/Port/Username/Database somente se a instalacao do PostgreSQL fugir do padrao.",
+  "ConnectionStrings": {
+    "AtelieHub": "Host=localhost;Port=5432;Database=ateliehub;Username=postgres;Password=COLOQUE_A_SENHA_AQUI"
+  }
+}
