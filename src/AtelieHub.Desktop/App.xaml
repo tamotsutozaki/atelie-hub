@@ -14,6 +14,7 @@
 
             <conv:EnumDescricaoConverter x:Key="EnumDescricao" />
             <conv:PrioridadeParaCorConverter x:Key="PrioridadeCor" />
+            <conv:ContagemZeroParaVisivelConverter x:Key="ZeroParaVisivel" />
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </ResourceDictionary>
     </Application.Resources>

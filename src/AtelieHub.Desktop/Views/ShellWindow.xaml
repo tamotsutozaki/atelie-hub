@@ -4,8 +4,8 @@
         xmlns:vm="clr-namespace:AtelieHub.Desktop.ViewModels"
         xmlns:pages="clr-namespace:AtelieHub.Desktop.Views.Pages"
         Title="Ateliê Hub"
-        Width="1150" Height="760"
-        MinWidth="900" MinHeight="600"
+        Width="1280" Height="800"
+        MinWidth="1040" MinHeight="680"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource Brand.Surface}">
 

@@ -30,7 +30,7 @@ public partial class PedidosViewModel : ObservableObject
     {
         _pedidoService = pedidoService;
         _services = services;
-        _filtroStatusSelecionado = FiltrosStatus[0]; // "Todos os status" visível ao abrir
+        _filtroStatusSelecionado = FiltrosStatus[0]; // pill "Todos" ativa ao abrir
         _ = CarregarAsync();
     }
 
@@ -43,7 +43,7 @@ public partial class PedidosViewModel : ObservableObject
 
     public IReadOnlyList<OpcaoStatus> FiltrosStatus { get; } = new List<OpcaoStatus>
     {
-        new("Todos os status", null),
+        new("Todos", null),
         new("Orçamento", StatusPedido.Orcamento),
         new("Aguardando pagamento", StatusPedido.AguardandoPagamento),
         new("Em produção", StatusPedido.EmProducao),
@@ -65,6 +65,7 @@ public partial class PedidosViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditarCommand))]
     [NotifyCanExecuteChangedFor(nameof(EtiquetaCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExcluirCommand))]
     private Pedido? _pedidoSelecionado;
 
     partial void OnBuscaChanged(string? value) => _ = CarregarAsync();
@@ -176,6 +177,36 @@ public partial class PedidosViewModel : ObservableObject
         catch (Exception ex)
         {
             MessageBox.Show("Não foi possível mover o pedido.\n\nDetalhe: " + ex.Message,
+                "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(TemSelecao))]
+    private async Task ExcluirAsync()
+    {
+        if (PedidoSelecionado is null)
+        {
+            return;
+        }
+
+        var confirma = MessageBox.Show(
+            $"Excluir o pedido #{PedidoSelecionado.Numero} \"{PedidoSelecionado.Titulo}\" definitivamente?\n\n" +
+            "Esta ação não pode ser desfeita. Lançamentos financeiros já registrados são mantidos.",
+            "Ateliê Hub", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (confirma != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        try
+        {
+            await _pedidoService.RemoverAsync(PedidoSelecionado.Id);
+            PedidoSelecionado = null;
+            await CarregarAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Não foi possível excluir o pedido.\n\nDetalhe: " + ex.Message,
                 "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

@@ -32,6 +32,7 @@ public partial class EstoqueViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditarCommand))]
     [NotifyCanExecuteChangedFor(nameof(AlternarAtivoCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExcluirCommand))]
     private ProdutoEstoque? _selecionado;
 
     partial void OnBuscaChanged(string? value) => _ = CarregarAsync();
@@ -93,6 +94,36 @@ public partial class EstoqueViewModel : ObservableObject
         catch (Exception ex)
         {
             MessageBox.Show("Não foi possível alterar o item.\n\nDetalhe: " + ex.Message,
+                "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(TemSelecao))]
+    private async Task ExcluirAsync()
+    {
+        if (Selecionado is null)
+        {
+            return;
+        }
+
+        var confirma = MessageBox.Show(
+            $"Excluir o item \"{Selecionado.Nome}\" definitivamente?\n\n" +
+            "Esta ação não pode ser desfeita.",
+            "Ateliê Hub", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (confirma != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        try
+        {
+            await _estoqueService.RemoverAsync(Selecionado.Id);
+            Selecionado = null;
+            await CarregarAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Não foi possível excluir o item.\n\nDetalhe: " + ex.Message,
                 "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

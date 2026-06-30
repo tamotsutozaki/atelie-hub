@@ -14,4 +14,10 @@ public interface IClienteService
 
     /// <summary>Inativa (false) ou reativa (true) um cliente, sem apagar o registro.</summary>
     Task DefinirAtivoAsync(Guid id, bool ativo, CancellationToken ct = default);
+
+    /// <summary>
+    /// Exclui o cliente definitivamente. Lança <see cref="InvalidOperationException"/> se ele
+    /// tiver pedidos vinculados (o vínculo é Restrict) — nesse caso a opção é inativar.
+    /// </summary>
+    Task RemoverAsync(Guid id, CancellationToken ct = default);
 }

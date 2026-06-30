@@ -12,6 +12,68 @@
             <Setter Property="Padding" Value="12,10" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
+
+        <!-- Pill de filtro (cápsula clicável, estilo Modrinth). Seleção única via ListBox. -->
+        <Style x:Key="PillFiltro" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{StaticResource Brand.Text}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="pill" CornerRadius="16" Padding="14,7"
+                                Background="{StaticResource Brand.SandLight}"
+                                BorderBrush="{StaticResource Brand.Sand}" BorderThickness="1">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="pill" Property="Background" Value="{StaticResource Brand.Sand}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="pill" Property="Background" Value="{StaticResource Brand.Primary}" />
+                                <Setter TargetName="pill" Property="BorderBrush" Value="{StaticResource Brand.Primary}" />
+                                <Setter Property="Foreground" Value="{StaticResource Brand.TextOnDark}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Toggle em forma de pill (segmento Lista / Quadro). -->
+        <Style x:Key="PillToggle" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="Foreground" Value="{StaticResource Brand.Text}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="pill" CornerRadius="16" Padding="14,7"
+                                Background="{StaticResource Brand.SandLight}"
+                                BorderBrush="{StaticResource Brand.Sand}" BorderThickness="1">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="pill" Property="Background" Value="{StaticResource Brand.Sand}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="pill" Property="Background" Value="{StaticResource Brand.Primary}" />
+                                <Setter TargetName="pill" Property="BorderBrush" Value="{StaticResource Brand.Primary}" />
+                                <Setter Property="Foreground" Value="{StaticResource Brand.TextOnDark}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid Margin="28">
@@ -21,53 +83,89 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="0,0,0,16">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <ui:TextBox Width="240" PlaceholderText="Buscar por título ou cliente..."
-                            Text="{Binding Busca, UpdateSourceTrigger=PropertyChanged, Delay=250}" />
-                <ComboBox Width="180" Margin="12,0,0,0" VerticalAlignment="Center"
-                          ItemsSource="{Binding FiltrosStatus}" DisplayMemberPath="Texto"
-                          SelectedItem="{Binding FiltroStatusSelecionado}">
-                    <ComboBox.Style>
-                        <Style TargetType="ComboBox">
-                            <Style.Triggers>
-                                <!-- No Quadro as colunas já são os status; o filtro não se aplica. -->
-                                <DataTrigger Binding="{Binding ModoQuadro}" Value="True">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ComboBox.Style>
-                </ComboBox>
+            <!-- Linha 1: busca (preenche) + ações principais -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <TextBlock Text="Ver:" VerticalAlignment="Center" Margin="0,0,8,0"
-                               Foreground="{StaticResource Brand.TextMuted}" />
-                    <RadioButton Content="Lista" GroupName="ModoView" IsChecked="True"
-                                 VerticalContentAlignment="Center" Margin="0,0,10,0"
-                                 Foreground="{StaticResource Brand.Text}" />
-                    <RadioButton Content="Quadro" GroupName="ModoView" IsChecked="{Binding ModoQuadro}"
-                                 VerticalContentAlignment="Center"
-                                 Foreground="{StaticResource Brand.Text}" />
+                <ui:TextBox Grid.Column="0" VerticalAlignment="Center" MinHeight="42"
+                            PlaceholderText="Buscar por título ou cliente..."
+                            Text="{Binding Busca, UpdateSourceTrigger=PropertyChanged, Delay=250}">
+                    <ui:TextBox.Icon>
+                        <ui:SymbolIcon Symbol="Search24" />
+                    </ui:TextBox.Icon>
+                </ui:TextBox>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
+                            Margin="12,0,0,0">
+                    <Button Content="+ Novo pedido" Style="{StaticResource Botao.Primario}"
+                            Command="{Binding NovoCommand}" Margin="0,0,10,0" />
+                    <Button Content="Modo Foco" Style="{StaticResource Botao.Acento}"
+                            Command="{Binding ModoFocoCommand}" />
                 </StackPanel>
-            </StackPanel>
+            </Grid>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button Content="Modo Foco" Style="{StaticResource Botao.Acento}"
-                        Command="{Binding ModoFocoCommand}" Margin="0,0,10,0" />
-                <Button Content="Etiqueta" Command="{Binding EtiquetaCommand}"
-                        Padding="16,10" Margin="0,0,10,0" />
-                <Button Content="Editar" Command="{Binding EditarCommand}"
-                        Padding="16,10" Margin="0,0,10,0" />
-                <Button Content="+ Novo pedido" Style="{StaticResource Botao.Primario}"
-                        Command="{Binding NovoCommand}" />
-            </StackPanel>
-        </Grid>
+            <!-- Linha 2: funil + pills de status (preenchem e quebram) + visão e ações contextuais -->
+            <Grid Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <DockPanel Grid.Column="0">
+                    <ui:SymbolIcon DockPanel.Dock="Left" Symbol="Filter24" FontSize="18"
+                                   VerticalAlignment="Top" Margin="0,9,12,0"
+                                   Foreground="{StaticResource Brand.TextMuted}" />
+                    <ListBox ItemsSource="{Binding FiltrosStatus}"
+                             SelectedItem="{Binding FiltroStatusSelecionado}"
+                             Background="Transparent" BorderThickness="0" Padding="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ItemContainerStyle="{StaticResource PillFiltro}">
+                        <ListBox.Style>
+                            <Style TargetType="ListBox">
+                                <Style.Triggers>
+                                    <!-- No Quadro as colunas já são os status; o filtro não se aplica. -->
+                                    <DataTrigger Binding="{Binding ModoQuadro}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Opacity" Value="0.5" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Style>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Texto}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top"
+                            Margin="12,0,0,0">
+                    <RadioButton Content="Lista" GroupName="ModoView" IsChecked="True"
+                                 Style="{StaticResource PillToggle}" />
+                    <RadioButton Content="Quadro" GroupName="ModoView" IsChecked="{Binding ModoQuadro}"
+                                 Style="{StaticResource PillToggle}" />
+                    <Border Width="1" Background="{StaticResource Brand.SandLight}" Margin="4,2,12,2" />
+                    <Button Content="Editar" Command="{Binding EditarCommand}"
+                            Padding="16,10" Margin="0,0,10,0" />
+                    <Button Content="Etiqueta" Command="{Binding EtiquetaCommand}"
+                            Padding="16,10" Margin="0,0,10,0" />
+                    <Button Content="Excluir" Style="{StaticResource Botao.Perigo}"
+                            Command="{Binding ExcluirCommand}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
 
         <Grid Grid.Row="1">
             <!-- Visão LISTA -->

@@ -108,6 +108,22 @@ public class PedidoService : IPedidoService
         await db.SaveChangesAsync(ct);
     }
 
+    public async Task RemoverAsync(Guid id, CancellationToken ct = default)
+    {
+        await using var db = await _factory.CreateDbContextAsync(ct);
+
+        var pedido = await db.Pedidos.FirstOrDefaultAsync(p => p.Id == id, ct);
+        if (pedido is null)
+        {
+            return;
+        }
+
+        // Lançamentos financeiros têm PedidoId apenas informativo (sem FK): permanecem após a
+        // exclusão — apagar o pedido não deve sumir com o dinheiro já registrado.
+        db.Pedidos.Remove(pedido);
+        await db.SaveChangesAsync(ct);
+    }
+
     public async Task<IReadOnlyList<Pedido>> ListarEmProducaoVencendoAsync(int dias, CancellationToken ct = default)
     {
         await using var db = await _factory.CreateDbContextAsync(ct);

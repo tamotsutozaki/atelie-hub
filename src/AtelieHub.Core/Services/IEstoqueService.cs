@@ -10,6 +10,9 @@ public interface IEstoqueService
 
     Task DefinirAtivoAsync(Guid id, bool ativo, CancellationToken ct = default);
 
+    /// <summary>Exclui o item de estoque definitivamente.</summary>
+    Task RemoverAsync(Guid id, CancellationToken ct = default);
+
     /// <summary>Quantidade de itens ativos abaixo (ou igual) do estoque mínimo — usado no painel.</summary>
     Task<int> ContarBaixoAsync(CancellationToken ct = default);
 }

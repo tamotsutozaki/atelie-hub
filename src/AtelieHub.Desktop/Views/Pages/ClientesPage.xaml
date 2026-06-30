@@ -28,17 +28,19 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <ui:TextBox Width="300" PlaceholderText="Buscar por nome, telefone, e-mail..."
+            <WrapPanel Grid.Column="0" Orientation="Horizontal">
+                <ui:TextBox Width="300" Margin="0,0,0,8" PlaceholderText="Buscar por nome, telefone, e-mail..."
                             Text="{Binding Busca, UpdateSourceTrigger=PropertyChanged, Delay=250}" />
                 <CheckBox Content="Mostrar inativos" IsChecked="{Binding MostrarInativos}"
-                          VerticalAlignment="Center" Margin="16,0,0,0"
+                          VerticalAlignment="Center" Margin="16,0,0,8"
                           Foreground="{StaticResource Brand.Text}" />
-            </StackPanel>
+            </WrapPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button Content="Inativar / Reativar" Command="{Binding AlternarAtivoCommand}"
                         Padding="16,10" Margin="0,0,10,0" />
+                <Button Content="Excluir" Style="{StaticResource Botao.Perigo}"
+                        Command="{Binding ExcluirCommand}" Margin="0,0,10,0" />
                 <Button Content="Editar" Command="{Binding EditarCommand}"
                         Padding="16,10" Margin="0,0,10,0" />
                 <Button Content="+ Novo cliente" Style="{StaticResource Botao.Primario}"

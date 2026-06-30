@@ -81,6 +81,20 @@ public class EstoqueService : IEstoqueService
         await db.SaveChangesAsync(ct);
     }
 
+    public async Task RemoverAsync(Guid id, CancellationToken ct = default)
+    {
+        await using var db = await _factory.CreateDbContextAsync(ct);
+
+        var produto = await db.ProdutosEstoque.FirstOrDefaultAsync(p => p.Id == id, ct);
+        if (produto is null)
+        {
+            return;
+        }
+
+        db.ProdutosEstoque.Remove(produto);
+        await db.SaveChangesAsync(ct);
+    }
+
     public async Task<int> ContarBaixoAsync(CancellationToken ct = default)
     {
         await using var db = await _factory.CreateDbContextAsync(ct);

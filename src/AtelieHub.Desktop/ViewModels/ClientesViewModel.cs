@@ -31,6 +31,7 @@ public partial class ClientesViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditarCommand))]
     [NotifyCanExecuteChangedFor(nameof(AlternarAtivoCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExcluirCommand))]
     private Cliente? _clienteSelecionado;
 
     partial void OnBuscaChanged(string? value) => _ = CarregarAsync();
@@ -92,6 +93,41 @@ public partial class ClientesViewModel : ObservableObject
         catch (Exception ex)
         {
             MessageBox.Show("Não foi possível alterar a situação do cliente.\n\nDetalhe: " + ex.Message,
+                "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(TemSelecao))]
+    private async Task ExcluirAsync()
+    {
+        if (ClienteSelecionado is null)
+        {
+            return;
+        }
+
+        var confirma = MessageBox.Show(
+            $"Excluir o cliente \"{ClienteSelecionado.Nome}\" definitivamente?\n\n" +
+            "Esta ação não pode ser desfeita.",
+            "Ateliê Hub", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (confirma != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        try
+        {
+            await _clienteService.RemoverAsync(ClienteSelecionado.Id);
+            ClienteSelecionado = null;
+            await CarregarAsync();
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Cliente com pedidos vinculados: mensagem amigável já vem pronta do serviço.
+            MessageBox.Show(ex.Message, "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Não foi possível excluir o cliente.\n\nDetalhe: " + ex.Message,
                 "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

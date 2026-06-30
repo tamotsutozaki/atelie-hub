@@ -27,18 +27,20 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <ui:TextBox Width="260" PlaceholderText="Buscar item..."
+            <WrapPanel Grid.Column="0" Orientation="Horizontal">
+                <ui:TextBox Width="260" Margin="0,0,0,8" PlaceholderText="Buscar item..."
                             Text="{Binding Busca, UpdateSourceTrigger=PropertyChanged, Delay=250}" />
                 <CheckBox Content="Só estoque baixo" IsChecked="{Binding SomenteBaixo}"
-                          VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{StaticResource Brand.Text}" />
+                          VerticalAlignment="Center" Margin="16,0,0,8" Foreground="{StaticResource Brand.Text}" />
                 <CheckBox Content="Mostrar inativos" IsChecked="{Binding MostrarInativos}"
-                          VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{StaticResource Brand.Text}" />
-            </StackPanel>
+                          VerticalAlignment="Center" Margin="16,0,0,8" Foreground="{StaticResource Brand.Text}" />
+            </WrapPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button Content="Ativar / Inativar" Command="{Binding AlternarAtivoCommand}"
                         Padding="16,10" Margin="0,0,10,0" />
+                <Button Content="Excluir" Style="{StaticResource Botao.Perigo}"
+                        Command="{Binding ExcluirCommand}" Margin="0,0,10,0" />
                 <Button Content="Editar" Command="{Binding EditarCommand}" Padding="16,10" Margin="0,0,10,0" />
                 <Button Content="+ Novo item" Style="{StaticResource Botao.Primario}"
                         Command="{Binding NovoCommand}" />

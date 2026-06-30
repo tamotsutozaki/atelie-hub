@@ -98,4 +98,28 @@ public class ClienteService : IClienteService
         cliente.Ativo = ativo;
         await db.SaveChangesAsync(ct);
     }
+
+    public async Task RemoverAsync(Guid id, CancellationToken ct = default)
+    {
+        await using var db = await _factory.CreateDbContextAsync(ct);
+
+        var cliente = await db.Clientes.FirstOrDefaultAsync(c => c.Id == id, ct);
+        if (cliente is null)
+        {
+            return;
+        }
+
+        // O vínculo Pedido→Cliente é Restrict: bloquear aqui dá uma mensagem clara em vez do
+        // erro cru de chave estrangeira vindo do banco.
+        var qtdPedidos = await db.Pedidos.CountAsync(p => p.ClienteId == id, ct);
+        if (qtdPedidos > 0)
+        {
+            throw new InvalidOperationException(
+                $"Este cliente tem {qtdPedidos} pedido(s) vinculado(s) e não pode ser excluído.\n\n" +
+                "Exclua os pedidos primeiro ou use \"Inativar\" para apenas ocultá-lo da lista.");
+        }
+
+        db.Clientes.Remove(cliente);
+        await db.SaveChangesAsync(ct);
+    }
 }

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows;
 using AtelieHub.Core.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -32,6 +33,12 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty] private int _marketingPendente;
     [ObservableProperty] private decimal _saldoCaixa;
 
+    public ObservableCollection<DashboardItem> PedidosEmAbertoItens { get; } = new();
+    public ObservableCollection<DashboardItem> AEntregarItens { get; } = new();
+    public ObservableCollection<DashboardItem> PendenciasFinanceirasItens { get; } = new();
+    public ObservableCollection<DashboardItem> EstoqueBaixoItens { get; } = new();
+    public ObservableCollection<DashboardItem> MarketingPendenteItens { get; } = new();
+
     [ObservableProperty] private bool _ocupado;
 
     /// <summary>Sinaliza que a última carga do painel falhou (para a UI avisar em vez de mostrar zeros como se fossem reais).</summary>
@@ -60,6 +67,12 @@ public partial class DashboardViewModel : ObservableObject
             EstoqueBaixo = resumo.EstoqueBaixo;
             MarketingPendente = resumo.MarketingPendente;
             SaldoCaixa = resumo.SaldoCaixa;
+
+            Preencher(PedidosEmAbertoItens, resumo.PedidosEmAbertoItens);
+            Preencher(AEntregarItens, resumo.AEntregarItens);
+            Preencher(PendenciasFinanceirasItens, resumo.PendenciasFinanceirasItens);
+            Preencher(EstoqueBaixoItens, resumo.EstoqueBaixoItens);
+            Preencher(MarketingPendenteItens, resumo.MarketingPendenteItens);
         }
         catch (Exception ex)
         {
@@ -73,6 +86,15 @@ public partial class DashboardViewModel : ObservableObject
                 MessageBox.Show("Não foi possível atualizar o painel.\n\nDetalhe: " + ex.Message,
                     "Ateliê Hub", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+    }
+
+    private static void Preencher(ObservableCollection<DashboardItem> destino, IReadOnlyList<DashboardItem> origem)
+    {
+        destino.Clear();
+        foreach (var item in origem)
+        {
+            destino.Add(item);
         }
     }
 
