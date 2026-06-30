@@ -1,0 +1,90 @@
+<Window x:Class="AtelieHub.Desktop.Views.ModoFocoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="Modo Foco"
+        WindowState="Maximized"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Brand.Dark}">
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding SairCommand}" />
+        <KeyBinding Key="Left" Command="{Binding AnteriorCommand}" />
+        <KeyBinding Key="Right" Command="{Binding ProximaCommand}" />
+    </Window.InputBindings>
+
+    <Grid Margin="56,40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Barra superior mínima -->
+        <Grid Grid.Row="0">
+            <TextBlock Text="Modo Foco — produção" FontSize="24" FontWeight="Bold"
+                       Foreground="{StaticResource Brand.TextOnDark}" VerticalAlignment="Center" />
+            <Button Content="Sair (Esc)" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Padding="18,9" Command="{Binding SairCommand}" />
+        </Grid>
+
+        <!-- Estado vazio -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Visibility="{Binding Vazio, Converter={StaticResource BoolToVis}}">
+            <TextBlock Text="Nada em produção com prazo nos próximos dias." FontSize="26" FontWeight="SemiBold"
+                       Foreground="{StaticResource Brand.TextOnDark}" HorizontalAlignment="Center" />
+            <TextBlock Text="Quando você mover pedidos para “Em produção”, eles aparecem aqui."
+                       FontSize="15" Foreground="{StaticResource Brand.Sand}" Margin="0,12,0,0"
+                       HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Peça atual -->
+        <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly" Margin="0,28"
+                 Visibility="{Binding TemItens, Converter={StaticResource BoolToVis}}">
+            <Border Style="{StaticResource Card}" Width="860" Padding="48">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="{Binding Posicao}" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{StaticResource Brand.TextMuted}" VerticalAlignment="Center" />
+                        <Border HorizontalAlignment="Right" Background="#B23B3B" CornerRadius="6" Padding="12,5"
+                                Visibility="{Binding PedidoAtual.Urgente, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="URGENTE" FontSize="14" FontWeight="Bold" Foreground="White" />
+                        </Border>
+                    </Grid>
+
+                    <TextBlock FontSize="40" FontWeight="Bold" Foreground="{StaticResource Brand.Text}"
+                               TextWrapping="Wrap" Margin="0,14,0,0">
+                        <Run Text="#" /><Run Text="{Binding PedidoAtual.Numero, Mode=OneWay}" /><Run Text="  ·  " /><Run Text="{Binding PedidoAtual.Titulo, Mode=OneWay}" />
+                    </TextBlock>
+
+                    <TextBlock Text="{Binding PedidoAtual.Cliente.Nome, StringFormat='Cliente: {0}'}"
+                               FontSize="20" Foreground="{StaticResource Brand.TextMuted}" Margin="0,12,0,0" />
+
+                    <TextBlock Text="{Binding PrazoTexto}" FontSize="20" FontWeight="SemiBold"
+                               Foreground="{StaticResource Brand.Primary}" Margin="0,6,0,0" />
+
+                    <TextBlock Text="Observações" Style="{StaticResource Campo.Label}" Margin="0,28,0,6" />
+                    <TextBlock Text="{Binding PedidoAtual.Observacoes}" FontSize="18"
+                               Foreground="{StaticResource Brand.Text}" TextWrapping="Wrap" />
+
+                    <Button Content="✓  Marcar como pronto" HorizontalAlignment="Left" Margin="0,36,0,0"
+                            FontSize="16" Style="{StaticResource Botao.Primario}"
+                            Command="{Binding MarcarProntoCommand}" />
+                </StackPanel>
+            </Border>
+        </Viewbox>
+
+        <!-- Navegação -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center"
+                    Visibility="{Binding TemItens, Converter={StaticResource BoolToVis}}">
+            <Button Content="‹  Anterior" Padding="22,11" Margin="0,0,18,0"
+                    Command="{Binding AnteriorCommand}" />
+            <TextBlock Text="{Binding Posicao}" VerticalAlignment="Center" FontSize="15"
+                       Foreground="{StaticResource Brand.Sand}" Margin="0,0,18,0" />
+            <Button Content="Próxima  ›" Padding="22,11"
+                    Command="{Binding ProximaCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

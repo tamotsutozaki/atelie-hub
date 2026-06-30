@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <conv:EnumDescricaoConverter x:Key="EnumDescricao" />
+            <conv:PrioridadeParaCorConverter x:Key="PrioridadeCor" />
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </ResourceDictionary>
     </Application.Resources>

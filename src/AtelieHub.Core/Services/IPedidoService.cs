@@ -15,4 +15,10 @@ public interface IPedidoService
 
     /// <summary>Atualiza apenas o status de produção do pedido.</summary>
     Task DefinirStatusAsync(Guid id, StatusPedido status, CancellationToken ct = default);
+
+    /// <summary>
+    /// Fila do "Modo Foco": pedidos em produção com prazo vencendo em até <paramref name="dias"/> dias
+    /// (mais os sem prazo, ao final). Cliente carregado; ordenados por urgência e depois por prazo.
+    /// </summary>
+    Task<IReadOnlyList<Pedido>> ListarEmProducaoVencendoAsync(int dias, CancellationToken ct = default);
 }

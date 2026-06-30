@@ -108,6 +108,26 @@ public class PedidoService : IPedidoService
         await db.SaveChangesAsync(ct);
     }
 
+    public async Task<IReadOnlyList<Pedido>> ListarEmProducaoVencendoAsync(int dias, CancellationToken ct = default)
+    {
+        await using var db = await _factory.CreateDbContextAsync(ct);
+
+        // Data de negócio (Kind local): PrazoEntrega é 'timestamp without time zone' e o Npgsql
+        // rejeita comparação com DateTime de Kind=Utc. DateTime.Today é consistente com a gravação.
+        var limite = DateTime.Today.AddDays(dias);
+
+        // Em produção: vencendo na janela OU sem prazo (peças que ela está fazendo agora também
+        // entram no foco). Sem prazo vai para o fim (Postgres ordena NULLS LAST no ASC).
+        return await db.Pedidos
+            .AsNoTracking()
+            .Include(p => p.Cliente)
+            .Where(p => p.Status == StatusPedido.EmProducao
+                        && (p.PrazoEntrega == null || p.PrazoEntrega <= limite))
+            .OrderByDescending(p => p.Urgente)
+            .ThenBy(p => p.PrazoEntrega)
+            .ToListAsync(ct);
+    }
+
     private static string EscaparCuringa(string s) =>
         s.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
 }

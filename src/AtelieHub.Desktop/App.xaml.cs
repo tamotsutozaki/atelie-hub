@@ -92,6 +92,8 @@ public partial class App : Application
                 services.AddTransient<ProdutoEstoqueEdicaoViewModel>();
                 services.AddTransient<MarketingViewModel>();
                 services.AddTransient<TarefaMarketingEdicaoViewModel>();
+                services.AddTransient<EtiquetaEnvioViewModel>();
+                services.AddTransient<ModoFocoViewModel>();
 
                 // Janelas
                 services.AddSingleton<ShellWindow>();
@@ -101,6 +103,8 @@ public partial class App : Application
                 services.AddTransient<LancamentoEdicaoWindow>();
                 services.AddTransient<ProdutoEstoqueEdicaoWindow>();
                 services.AddTransient<TarefaMarketingEdicaoWindow>();
+                services.AddTransient<EtiquetaEnvioWindow>();
+                services.AddTransient<ModoFocoWindow>();
             })
             .Build();
 
